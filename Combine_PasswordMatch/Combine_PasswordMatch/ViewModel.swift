@@ -24,7 +24,7 @@ class ViewModel {
     
     // 값 일치 여부 확인
     lazy var isMatch: AnyPublisher<Bool, Never> =
-        Publishers.CombineLatest($passwordInput, $checkPasswordInput)
+        Publishers.CombineLatest($passwordInput, $checkPasswordInput) // Publisher는 $ 표시 
         .map({ (password: String, checkPassword: String) in
             if password == "" || checkPassword == "" {
                 return false

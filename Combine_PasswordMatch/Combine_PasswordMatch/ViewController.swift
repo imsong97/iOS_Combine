@@ -14,7 +14,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var checkPassword: UITextField!
     @IBOutlet weak var btn: UIButton!
     
-    var viewModel: ViewModel!
+//    var viewModel: ViewModel!
+    var viewModel = ViewModel()
     
     private var cancel = Set<AnyCancellable>()
 
@@ -22,12 +23,14 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
-        viewModel = ViewModel()
+//        viewModel = ViewModel()
         
+        // 텍스트필드가 ViewModel의 Publisher를 구독
         password.myTextPublisher
 //            .print() -> 로그 찍기 가능
             .receive(on: DispatchQueue.main) // 메인스레드에서 동작
             .assign(to: \.passwordInput, on: viewModel) // 이벤트 받음 (구독)
+            // \. -> key-path-expression: 간접적으로 데이터를 가져오거나 수정하는 방법
             .store(in: &cancel) // 메모리 해제
         
         checkPassword.myTextPublisher
@@ -50,7 +53,7 @@ extension UITextField {
             .compactMap{ $0.object as? UITextField } // UITextField 가져옴
             .map{ $0.text ?? "" } // String 가져옴
 //            .print() -> 로그 찍기 가능
-            .eraseToAnyPublisher() // AnyPublisher
+            .eraseToAnyPublisher() // AnyPublisher 형태로
     }
 }
 
